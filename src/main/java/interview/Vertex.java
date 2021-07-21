@@ -16,6 +16,14 @@ public class Vertex {
         this.label = label;
     }
 
+    @Override
+    public int hashCode() {
+        return label.hashCode();
+    }
 
-
+    @Override
+    public boolean equals(Object o)
+    {
+        return this.label.equals(o);
+    }
 }

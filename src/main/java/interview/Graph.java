@@ -4,7 +4,9 @@ import java.util.*;
 
 public class Graph {
 
-    private static Map<Vertex, List<Vertex>> map = new HashMap<>();
+    volatile Integer integer;
+
+    static Map<Vertex, List<Vertex>> map = new HashMap<>();
 
     public Graph(Map<Vertex, List<Vertex>> map) {
         this.map = map;
@@ -21,50 +23,66 @@ public class Graph {
         this.map = map;
     }
 
-    public void addVertex(Vertex vertex, ArrayList arrayList) {
-        map.put(vertex, arrayList);
+    public static void addEdge(Vertex vertex, Vertex vertex2) {
+        map.get(vertex).add(vertex2);
+        map.get(vertex2).add(vertex);
     }
 
-    public void removeVertex(Vertex vertex) {
-        map.remove(vertex);
-    }
 
-    public void addEdge(Vertex vertex1, Vertex vertex2) {
-        map.get(vertex1).add(vertex2);
-        map.get(vertex2).add(vertex1);
-    }
-
-    public static void createGraph() {
+    public static Graph createGraph() {
         Graph graph = new Graph();
-        Vertex vertex = new Vertex("A");
-        Vertex vertex2 = new Vertex("B");
-        Vertex vertex3 = new Vertex("C");
-        Vertex vertex4 = new Vertex("D");
-        Vertex vertex5 = new Vertex("E");
 
-        map.put(vertex,new ArrayList<>());
-        map.put(vertex2,new ArrayList<>());
-        map.put(vertex3,new ArrayList<>());
-        map.put(vertex4,new ArrayList<>());
-        map.put(vertex5,new ArrayList<>());
+        Vertex vertexA = new Vertex("A");
+        Vertex vertexB = new Vertex("B");
+        Vertex vertexC = new Vertex("C");
+        Vertex vertexD = new Vertex("D");
+        Vertex vertexE = new Vertex("E");
 
-        graph.addEdge(vertex, vertex2);
-        graph.addEdge(vertex, vertex3);
-        graph.addEdge(vertex, vertex4);
-        graph.addEdge(vertex2, vertex5);
-        graph.addEdge(vertex3, vertex5);
-        graph.addEdge(vertex4, vertex5);
+        map.put(vertexA, new ArrayList<>());
+        map.put(vertexB, new ArrayList<>());
+        map.put(vertexC, new ArrayList<>());
+        map.put(vertexD, new ArrayList<>());
+        map.put(vertexE, new ArrayList<>());
+
+        addEdge(vertexA, vertexB);
+        addEdge(vertexA, vertexC);
+        addEdge(vertexA, vertexD);
+        addEdge(vertexB, vertexE);
+        addEdge(vertexC, vertexE);
+        addEdge(vertexD, vertexE);
+        graph.setMap(map);
+        return graph;
+
     }
 
-//    public Set<String> dfs(Graph graph, String root) {
-//
-//
-//    }
+
+    public static Set<Vertex> dfs(Graph graph, Vertex vertex) {
+        Stack<Vertex> stack = new Stack<>();
+        stack.add(vertex);
+        Set<Vertex> vertexSet = new HashSet<>();
+        vertexSet.add(vertex);
+        while (!stack.isEmpty()) {
+            List<Vertex> vertices = map.get(vertex);
+            for (Vertex ver:vertices) {
+                if (!vertexSet.contains(ver))
+                {
+                    stack.add(ver);
+                }
+                stack.pop();
+            }
+
+        }
+        return vertexSet;
+    }
 
 
     public static void main(String[] args) {
-        createGraph();
+        Graph graph = createGraph();
         System.out.println(map);
+
+        Map<Vertex, List<Vertex>> map = graph.getMap();
+        Vertex vertex= new Vertex("A");
+        System.out.println(dfs(graph, vertex));
     }
 
 
