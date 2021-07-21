@@ -22,8 +22,17 @@ public class Vertex {
     }
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(Object obj)
     {
-        return this.label.equals(o);
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Vertex other = (Vertex) obj;
+        if (!label.equals(other.label))
+            return false;
+        return true;
     }
 }

@@ -56,33 +56,33 @@ public class Graph {
     }
 
 
-    public static Set<Vertex> dfs(Graph graph, Vertex vertex) {
+    public static Set<Vertex> dfs(Vertex vertex) {
         Stack<Vertex> stack = new Stack<>();
         stack.add(vertex);
         Set<Vertex> vertexSet = new HashSet<>();
         vertexSet.add(vertex);
-        while (!stack.isEmpty()) {
-            List<Vertex> vertices = map.get(vertex);
-            for (Vertex ver:vertices) {
-                if (!vertexSet.contains(ver))
-                {
-                    stack.add(ver);
-                }
-                stack.pop();
-            }
+        List<Vertex> vertices = map.get(vertex);
 
+        while (!stack.isEmpty()) {
+            for (Vertex ver : vertices) {
+                if (!vertexSet.contains(ver)) {
+                    stack.add(ver);
+                    List<Vertex> vertices = map.get(ver);
+
+                } else {
+                    Vertex pop = stack.pop();
+                    vertexSet.add(pop);
+                }
+            }
         }
         return vertexSet;
     }
 
 
     public static void main(String[] args) {
-        Graph graph = createGraph();
-        System.out.println(map);
-
-        Map<Vertex, List<Vertex>> map = graph.getMap();
-        Vertex vertex= new Vertex("A");
-        System.out.println(dfs(graph, vertex));
+        createGraph();
+        Vertex vertex = new Vertex("A");
+        System.out.println(dfs(vertex));
     }
 
 
